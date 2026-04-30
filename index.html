@@ -259,6 +259,30 @@
   .coach-note { background: rgba(255,215,0,0.05); border: 1px solid rgba(255,215,0,0.2); border-radius: 8px; padding: 12px 14px; margin-top: 12px; font-size: 13px; color: var(--text); line-height: 1.6; font-style: italic; }
   .coach-note-label { font-family: 'Orbitron', monospace; font-size: 8px; letter-spacing: 2px; color: var(--gold); margin-bottom: 6px; font-style: normal; }
 
+  .video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,0,0,0.15);
+    border: 1px solid rgba(255,0,0,0.3);
+    color: var(--text);
+    padding: 8px 14px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    margin-right: 8px;
+    transition: all 0.2s;
+    font-family: 'Orbitron', monospace;
+    letter-spacing: 0.5px;
+  }
+  .video-link:hover {
+    background: rgba(255,0,0,0.25);
+    border-color: rgba(255,0,0,0.5);
+    transform: translateX(2px);
+  }
+
   .notes-area { margin-top: 12px; width: 100%; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-family: 'Rajdhani', sans-serif; font-size: 13px; resize: vertical; min-height: 70px; outline: none; transition: border-color 0.15s; }
   .notes-area:focus { border-color: rgba(139,47,255,0.4); }
   .notes-area::placeholder { color: var(--muted); }
@@ -355,8 +379,38 @@ const WEEKS_DATA = [
     coachNote: "La clé c'est de ne jamais monter le tempo avant que ce soit propre lentement. Si tu fais une erreur, c'est le signe de reculer le métronome. Chaque tempo bien maîtrisé est une victoire.",
     active: true
   },
-  { icon: "❓", quest: "SEMAINE 3",  title: "???", focus: "La suite s'adapte à ta progression.", tasks: [], coachNote: "", active: false },
-  { icon: "❓", quest: "SEMAINE 4",  title: "???", focus: "La suite s'adapte à ta progression.", tasks: [], coachNote: "", active: false },
+  {
+    icon: "🎵",
+    quest: "SEMAINE 3",
+    title: "Attentat (PLK) + Corrections rythmiques",
+    focus: "Cette semaine on passe à Attentat de PLK, et on corrige ce qui manquait sur les patterns rythmiques de Boys Don't Cry et Looking Out For You. L'idée c'est de solidifier ce qu'on a commencé tout en ajoutant un nouveau morceau.",
+    tasks: [
+      { text: "Apprendre Attentat (PLK) — accords et structure", time: "~15 min" },
+      { text: "Correction du pattern rythmique sur Boys Don't Cry", time: "~10 min" },
+      { text: "Correction du pattern rythmique sur Looking Out For You", time: "~10 min" },
+      { text: "Jouer les 3 morceaux avec fluidité et régularité", time: "~15 min" },
+    ],
+    coachNote: "Les corrections rythmiques, c'est ce qui fait la différence entre « jouer » et « groover ». Prends le temps de bien sentir chaque pattern avant de passer à la suite.",
+    active: true
+  },
+  {
+    icon: "🎸",
+    quest: "SEMAINE 4",
+    title: "Smell Like Teen Spirit (fingerstyle) + Entraînement rythmique",
+    focus: "Cette semaine on s'attaque à Smell Like Teen Spirit en fingerstyle — c'est un nouveau challenge technique. En parallèle, on renforce tes bases rythmiques avec les entraînements Bas/Haut et le rythme essentiel de la Rumba pour devenir autonome.",
+    tasks: [
+      { text: "Apprendre Smell Like Teen Spirit en fingerstyle — coordination main droite/gauche", time: "~20 min" },
+      { text: "Entraînement Bas/Haut — régularité et précision avec métronome", time: "~10 min" },
+      { text: "Maîtriser LA rythmique Rumba la plus utilisée — autonomie totale", time: "~15 min" },
+    ],
+    videos: [
+      { title: "▶️ Tuto Smell Like Teen Spirit", url: "https://www.youtube.com/watch?v=Ihwff7NJypQ" },
+      { title: "▶️ Entraînement Bas/Haut", url: "https://www.youtube.com/watch?v=T8VscEZ8WbQ" },
+      { title: "▶️ Rythme le plus utilisé (Rumba)", url: "https://www.youtube.com/watch?v=G_iihVj-720" }
+    ],
+    coachNote: "Le fingerstyle demande de la patience — chaque doigt doit trouver sa place. Pour les rythmes, utilise les vidéos GPS ou le métronome directement, l'objectif c'est que tu sois autonome pour travailler n'importe quel rythme.",
+    active: true
+  },
   { icon: "❓", quest: "SEMAINE 5",  title: "???", focus: "La suite s'adapte à ta progression.", tasks: [], coachNote: "", active: false },
   { icon: "❓", quest: "SEMAINE 6",  title: "???", focus: "La suite s'adapte à ta progression.", tasks: [], coachNote: "", active: false },
   { icon: "❓", quest: "SEMAINE 7",  title: "???", focus: "La suite s'adapte à ta progression.", tasks: [], coachNote: "", active: false },
@@ -467,6 +521,10 @@ function render() {
         </div>`;
     }).join('');
 
+    const videosHTML = w.videos ? w.videos.map(v => 
+      `<a href="${v.url}" target="_blank" class="video-link">${v.title}</a>`
+    ).join('') : '';
+
     const coachHTML = w.coachNote ? `
       <div class="coach-note">
         <div class="coach-note-label">💬 MESSAGE DE MELVIN</div>
@@ -497,6 +555,7 @@ function render() {
             <div class="focus-text">${w.focus}</div>
           </div>
           ${taskTotal > 0 ? `<div class="tasks-label">AU PROGRAMME</div><div class="task-list">${tasksHTML}</div>` : ''}
+          ${videosHTML ? `<div style="margin-top: 12px;">${videosHTML}</div>` : ''}
           ${coachHTML}
           <textarea class="notes-area" id="note-${i}" placeholder="Tes notes perso cette semaine..." onblur="saveNote(${i})">${noteVal}</textarea>
           ${!done
